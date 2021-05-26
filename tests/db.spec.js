@@ -25,6 +25,7 @@ describe('Database', () => {
       beforeAll(async () => {
         userToCreateAndUpdate = await createUser(userCredentials);
         const {rows} = await client.query(`SELECT * FROM users WHERE username = $1`, [userCredentials.username]);
+        
         queriedUser = rows[0];
       })
       it('Creates the user', async () => {

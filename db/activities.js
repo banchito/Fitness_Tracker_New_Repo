@@ -29,4 +29,31 @@ const getAllActivities = async() => {
     }
 }
 
-module.exports = {createActivity, getAllActivities}
+const updateActivity = async({ id, name, description }) => {
+    try{
+        const {rows: [activity]} = await client.query(`
+            UPDATE activities
+            SET name = ($2), description = ($3)
+            WHERE id=$1
+            RETURNING *; 
+        `,[id, name, description]);
+        return activity
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+}
+
+const getActivityById = async(id)=> {
+    try{
+        const {rows} = await client.query(`
+        SELECT * FROM activities WHERE id=$1;
+        `, [id]);
+        return rows;
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+}
+
+module.exports = {createActivity, getAllActivities, updateActivity, getActivityById}

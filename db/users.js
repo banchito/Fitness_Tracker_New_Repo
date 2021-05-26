@@ -18,15 +18,15 @@ const createUser = async({username, password}) => {
     }
 }
 
-const getUser = ({username, password}) => {
+const getUser = async({username, password}) => {
     try{
-        const {rows} = client.query(
+        const {rows} = await client.query(
             `
-              SELECT * FROM users WHERE username=$1 AND password=$2;
+              SELECT username FROM users WHERE username=$1 AND password=$2;
             `, [username, password]
         );
-        //console.log("getUser at user.js:", user);
-        //delete user.password
+         console.log("getUser at user.js:", rows);
+    
         return rows
     }catch (error){
         console.error(error)
@@ -34,4 +34,15 @@ const getUser = ({username, password}) => {
     }
 }
 
-module.exports = { createUser, getUser }
+const getUserById = async(id) => {
+    try{
+        const {rows} = await client.query(`
+            SELECT id, username FROM users WHERE id=$1;
+        `, [id]);
+        return rows;
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+}
+module.exports = { createUser, getUser, getUserById }

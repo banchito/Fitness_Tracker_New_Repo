@@ -88,6 +88,8 @@ async function createInitialUsers() {
     throw error;
   }
 }
+
+
 async function createInitialActivities() {
   try {
     console.log("Starting to create activities...");
