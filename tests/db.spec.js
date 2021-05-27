@@ -192,6 +192,7 @@ describe('Database', () => {
       let routine, user;
       beforeAll(async() => {
         user = await getUserById(1); 
+        console.log("test user: ",user);
         [routine] = await getPublicRoutinesByUser(user);
       })
       it('selects and returns an array of all routines made by user, includes their activities', async () => {
