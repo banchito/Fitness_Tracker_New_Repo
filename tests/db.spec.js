@@ -24,6 +24,7 @@ describe('Database', () => {
     describe('createUser({ username, password })', () => {
       beforeAll(async () => {
         userToCreateAndUpdate = await createUser(userCredentials);
+        // console.log("at await spec:",userToCreateAndUpdate);
         const {rows} = await client.query(`SELECT * FROM users WHERE username = $1`, [userCredentials.username]);
         
         queriedUser = rows[0];
@@ -60,6 +61,7 @@ describe('Database', () => {
     })
     describe('getUserById', () => {
       it('Gets a user based on the user Id', async () => {
+        // console.log("spect get userbyid:", userToCreateAndUpdate);
         const user = await getUserById(userToCreateAndUpdate.id);
         expect(user).toBeTruthy();
         expect(user.id).toBe(userToCreateAndUpdate.id);
@@ -162,7 +164,10 @@ describe('Database', () => {
       let routine, user;
       beforeAll(async() => {
         user = await getUserById(1); 
+        // const [{id}]= user
+        // console.log("db spec:", id);
         [routine] = await getAllRoutinesByUser(user);
+        // console.log("routine db spec:", routine);
       })
       it('selects and return an array of all routines made by user, includes their activities', async () => {
         expect(routine).toEqual(expect.objectContaining({
@@ -253,6 +258,7 @@ describe('Database', () => {
     describe('createRoutine', () => {
       it('creates and returns the new routine', async () => {
         routineToCreateAndUpdate = await createRoutine({creatorId: 2, isPublic: true, name: 'BodyWeight Day', goal: 'Do workouts that can be done from home, no gym or weights required.'});
+        console.log("rbyID spec: ", routineToCreateAndUpdate);
         const queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id)
         expect(routineToCreateAndUpdate).toEqual(queriedRoutine);
       })
@@ -261,6 +267,7 @@ describe('Database', () => {
       let queriedRoutine;
       beforeAll(async() => {
         routineToCreateAndUpdate = await updateRoutine({id: routineToCreateAndUpdate.id, isPublic: false, name: 'Arms Day', goal: 'Do all workouts that work those arms!'});
+        console.log("updateRoutine spec : ",routineToCreateAndUpdate);
         queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id);
       })
       it('Returns the updated routine', async () => {

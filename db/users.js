@@ -6,7 +6,7 @@ const createUser = async({username, password}) => {
             ` INSERT INTO users(username, password)
               VALUES ($1, $2)
               ON CONFLICT (username) DO NOTHING
-              RETURNING username;
+              RETURNING username, id;
             `, [username, password]
         );
         // console.log("createUsers at users.js:", user);
@@ -36,10 +36,11 @@ const getUser = async({username, password}) => {
 
 const getUserById = async(id) => {
     try{
-        const {rows} = await client.query(`
+        const {rows: [user]} = await client.query(`
             SELECT id, username FROM users WHERE id=$1;
         `, [id]);
-        return rows;
+        console.log("getUserById: ", user);
+        return user;
     }catch(error){
         console.error(error)
         throw error
