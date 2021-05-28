@@ -31,8 +31,8 @@ const getRoutineActivitiesByRoutine = async({id}) => {
 
 const updateRoutineActivity = async(fields = {}) => {
     
-    const idReference = fields.id
-    delete fields.id
+    //const idReference = fields.id
+    // delete fields.id
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(", ")
     console.log(fields)
     if (setString.length === 0) {
@@ -40,22 +40,38 @@ const updateRoutineActivity = async(fields = {}) => {
       }
 
       try{
-        const {rows:[routineActivity]} = await client.query(`SELECT * FROM routine_activities WHERE id = ${idReference};`)
-        console.log("routineActToUpdate:",routineActivity.id);
+        const {rows: [routine]} = await client.query(`SELECT id FROM routine_activities WHERE id = ${fields.id};`)
+        console.log("routineActToUpdate:",routine.id);
 
-        const {rows: [routineActiv]} = await client.query(`  
-        UPDATE routine_activities
-        SET ${setString}
-        WHERE id = ${routineActivity.id}
-        RETURNING *;
-        ` , Object.values(fields));
-        console.log("before return:", routineActiv);
-        return routineActiv;
+         const {rows: [routineUpdated]} = await client.query(`  
+         UPDATE routine_activities
+         SET ${setString}
+         WHERE id = ${routine.id}
+         RETURNING id, count, duration;
+         ` , Object.values(fields));
+         console.log("before return:", routineUpdated);
+         return routineUpdated;
       }catch(error){
         console.log(error)
         throw error
       }
 }
 
+const  destroyRoutineActivity = async(id) => {
+    //console.log("destroyRoutineActivity: ", id);
+    try{
+        const {rows: [routineActivity]} = await client.query(`
+        DELETE FROM routine_activities
+        WHERE id = $1
+        RETURNING *;
+        `, [id]);
+        console.log("destroyRA: ", routineActivity);
+        return routineActivity
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+}
 
-module.exports = {addActivityToRoutine, getRoutineActivitiesByRoutine, updateRoutineActivity}
+
+module.exports = {addActivityToRoutine, getRoutineActivitiesByRoutine, updateRoutineActivity, destroyRoutineActivity}

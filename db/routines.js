@@ -19,7 +19,7 @@ const createRoutine = async({creatorId, isPublic, name, goal}) => {
 }
 
 const getRoutineById = async(id) => {
-    // console.log("getRByid: ", id);
+     console.log("getRByid: ", id);
     try{
         const {rows: [routine]} = await client.query(`
         SELECT * FROM routines WHERE id=$1
@@ -66,7 +66,7 @@ const updateRoutine = async(fields = {}) => {
 }
 
 const destroyRoutine = async(id) => {
-    console.log("destroy: ", id);
+    // console.log("destroy: ", id);
     try{
         await client.query(`
         DELETE FROM routines

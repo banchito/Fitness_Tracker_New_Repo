@@ -328,8 +328,9 @@ describe('Database', () => {
     describe('updateRoutineActivity({ id, count, duration })', () => {
       it('Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.', async () => {
         const newRoutineActivityData = {id: routineActivityToCreateAndUpdate.id, count: 15, duration: 150};
-        console.log("id spec: ",newRoutineActivityData);
+        //console.log("id spec: ",newRoutineActivityData);
         routineActivityToCreateAndUpdate = await updateRoutineActivity(newRoutineActivityData);
+       
         expect(routineActivityToCreateAndUpdate.id).toBe(newRoutineActivityData.id);
         expect(routineActivityToCreateAndUpdate.count).toBe(newRoutineActivityData.count);
         expect(routineActivityToCreateAndUpdate.duration).toBe(newRoutineActivityData.duration);
@@ -337,7 +338,9 @@ describe('Database', () => {
     })
     describe('destroyRoutineActivity(id)', () => {
       it('remove routine_activity from database', async () => {
+        console.log("destroyroutiacti spec: ", routineActivityToCreateAndUpdate); 
         const deletedRoutine = await destroyRoutineActivity(routineActivityToCreateAndUpdate.id);
+        console.log("del id spec:",deletedRoutine);
         expect(deletedRoutine.id).toBe(routineActivityToCreateAndUpdate.id);
         const {rows} = await client.query(`
           SELECT * FROM routine_activities
