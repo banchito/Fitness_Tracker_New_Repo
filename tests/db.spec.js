@@ -197,7 +197,7 @@ describe('Database', () => {
       let routine, user;
       beforeAll(async() => {
         user = await getUserById(1); 
-        console.log("test user: ",user);
+        // console.log("test user: ",user);
         [routine] = await getPublicRoutinesByUser(user);
       })
       it('selects and returns an array of all routines made by user, includes their activities', async () => {
@@ -258,7 +258,7 @@ describe('Database', () => {
     describe('createRoutine', () => {
       it('creates and returns the new routine', async () => {
         routineToCreateAndUpdate = await createRoutine({creatorId: 2, isPublic: true, name: 'BodyWeight Day', goal: 'Do workouts that can be done from home, no gym or weights required.'});
-        console.log("rbyID spec: ", routineToCreateAndUpdate);
+        // console.log("rbyID spec: ", routineToCreateAndUpdate);
         const queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id)
         expect(routineToCreateAndUpdate).toEqual(queriedRoutine);
       })
@@ -267,8 +267,9 @@ describe('Database', () => {
       let queriedRoutine;
       beforeAll(async() => {
         routineToCreateAndUpdate = await updateRoutine({id: routineToCreateAndUpdate.id, isPublic: false, name: 'Arms Day', goal: 'Do all workouts that work those arms!'});
-        console.log("updateRoutine spec : ",routineToCreateAndUpdate);
+        console.log("updateRoutine spec : ",routineToCreateAndUpdate.id);
         queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id);
+        console.log("queriedRoutine spec: ", queriedRoutine);
       })
       it('Returns the updated routine', async () => {
         expect(routineToCreateAndUpdate).toBeTruthy();
@@ -317,7 +318,7 @@ describe('Database', () => {
     describe('addActivityToRoutine({ routineId, activityId, count, duration })', () => {
       it('creates a new routine_activity, and return it', async () => {
         routineActivityToCreateAndUpdate = await addActivityToRoutine(routineActivityData);
-        
+        console.log("routineActi spec:", routineActivityToCreateAndUpdate)
         expect(routineActivityToCreateAndUpdate.routineId).toBe(routineActivityData.routineId);
         expect(routineActivityToCreateAndUpdate.activityId).toBe(routineActivityData.activityId);
         expect(routineActivityToCreateAndUpdate.count).toBe(routineActivityData.count);
@@ -327,6 +328,7 @@ describe('Database', () => {
     describe('updateRoutineActivity({ id, count, duration })', () => {
       it('Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.', async () => {
         const newRoutineActivityData = {id: routineActivityToCreateAndUpdate.id, count: 15, duration: 150};
+        console.log("id spec: ",newRoutineActivityData);
         routineActivityToCreateAndUpdate = await updateRoutineActivity(newRoutineActivityData);
         expect(routineActivityToCreateAndUpdate.id).toBe(newRoutineActivityData.id);
         expect(routineActivityToCreateAndUpdate.count).toBe(newRoutineActivityData.count);
