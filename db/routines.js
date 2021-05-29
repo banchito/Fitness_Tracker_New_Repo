@@ -9,7 +9,7 @@ const createRoutine = async({creatorId, isPublic, name, goal}) => {
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
         `, [creatorId, isPublic, name, goal]);
-          console.log("createRoutine at routine.js:", activity);
+        //   console.log("createRoutine at routine.js:", activity);
 
         return activity;
     }catch(error){
@@ -19,12 +19,12 @@ const createRoutine = async({creatorId, isPublic, name, goal}) => {
 }
 
 const getRoutineById = async(id) => {
-     console.log("getRByid: ", id);
+    //  console.log("getRByid: ", id);
     try{
         const {rows: [routine]} = await client.query(`
         SELECT * FROM routines WHERE id=$1
         `, [id]);
-        console.log("get R by ID: ", routine);
+        // console.log("get R by ID: ", routine);
         return routine;
     }catch(error){
         console.error(error)
@@ -168,7 +168,7 @@ const getAllRoutinesByUser = async(user) => {
             delete row.count
 
         });
-        console.log("getAllRoutinesByUser: ",rows)
+        // console.log("getAllRoutinesByUser: ",rows)
 
         return rows;
     }catch(error){
@@ -199,7 +199,7 @@ const getPublicRoutinesByUser = async(user) => {
             delete row.count
 
         });
-        console.log("getAllRoutinesByUser: ",rows)
+        // console.log("getAllRoutinesByUser: ",rows)
 
         return rows;
     }catch(error){

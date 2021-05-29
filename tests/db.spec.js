@@ -269,7 +269,7 @@ describe('Database', () => {
         routineToCreateAndUpdate = await updateRoutine({id: routineToCreateAndUpdate.id, isPublic: false, name: 'Arms Day', goal: 'Do all workouts that work those arms!'});
         console.log("updateRoutine spec : ",routineToCreateAndUpdate.id);
         queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id);
-        console.log("queriedRoutine spec: ", queriedRoutine);
+        // console.log("queriedRoutine spec: ", queriedRoutine);
       })
       it('Returns the updated routine', async () => {
         expect(routineToCreateAndUpdate).toBeTruthy();
@@ -318,7 +318,7 @@ describe('Database', () => {
     describe('addActivityToRoutine({ routineId, activityId, count, duration })', () => {
       it('creates a new routine_activity, and return it', async () => {
         routineActivityToCreateAndUpdate = await addActivityToRoutine(routineActivityData);
-        console.log("routineActi spec:", routineActivityToCreateAndUpdate)
+        // console.log("routineActi spec:", routineActivityToCreateAndUpdate)
         expect(routineActivityToCreateAndUpdate.routineId).toBe(routineActivityData.routineId);
         expect(routineActivityToCreateAndUpdate.activityId).toBe(routineActivityData.activityId);
         expect(routineActivityToCreateAndUpdate.count).toBe(routineActivityData.count);
@@ -338,9 +338,9 @@ describe('Database', () => {
     })
     describe('destroyRoutineActivity(id)', () => {
       it('remove routine_activity from database', async () => {
-        console.log("destroyroutiacti spec: ", routineActivityToCreateAndUpdate); 
+        // console.log("destroyroutiacti spec: ", routineActivityToCreateAndUpdate); 
         const deletedRoutine = await destroyRoutineActivity(routineActivityToCreateAndUpdate.id);
-        console.log("del id spec:",deletedRoutine);
+        // console.log("del id spec:",deletedRoutine);
         expect(deletedRoutine.id).toBe(routineActivityToCreateAndUpdate.id);
         const {rows} = await client.query(`
           SELECT * FROM routine_activities

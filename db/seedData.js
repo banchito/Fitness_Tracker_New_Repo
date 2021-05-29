@@ -42,7 +42,6 @@ async function createTables() {
     name VARCHAR(255) UNIQUE NOT NULL,
     goal TEXT NOT NULL,
     FOREIGN KEY ("creatorId") REFERENCES users(id)
-
   );
 
   CREATE TABLE 	routine_activities(
@@ -80,8 +79,8 @@ async function createInitialUsers() {
     ];
     const users = await Promise.all(usersToCreate.map(createUser));
 
-    console.log("Users created:");
-    console.log(users);
+   
+   
     console.log("Finished creating users!");
   } catch (error) {
     console.error("Error creating users!");
@@ -168,14 +167,7 @@ async function createInitialRoutineActivities() {
     console.log("starting to create routine_activities...");
     const [bicepRoutine, chestRoutine, legRoutine, cardioRoutine] =
       await getRoutinesWithoutActivities();
-      console.log("Bicep Routine: ",bicepRoutine);
-      // Bicep Routine:  {
-        // id: 1,
-        // creatorId: 2,
-        // isPublic: false,
-        // name: 'Bicep Day',
-        // goal: 'Work the Back and Biceps.'
-      // }
+      // console.log("Bicep Routine: ",bicepRoutine);
       
     const [bicep1, bicep2, chest1, chest2, leg1, leg2, leg3] =
       await getAllActivities();
