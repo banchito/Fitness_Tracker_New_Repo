@@ -38,7 +38,7 @@ const getUser = async ({ username, password }) => {
     );
     // console.log("getUser at user.js:", user.password);
 
-    if (!user) return null;
+    if (!user) return false;
 
     const passwordMatch = compare(password, user.password);
     // console.log("password match :", passwordMatch);
