@@ -1,10 +1,11 @@
 const client = require("./client");
 const { hash, compare } = require("./hash");
 
-// todo getUserByUsername
+
 
 const createUser = async ({ username, password }) => {
   const hashedPassword = hash(password);
+  console.log("username and passw: ", username, password);
   // console.log("hashedPassword: ", hashedPassword);
   try {
     const {
@@ -17,7 +18,7 @@ const createUser = async ({ username, password }) => {
             `,
       [username, hashedPassword]
     );
-    // console.log("createUsers at users.js:", user);
+     console.log("createUsers at users.js:", user);
 
     return user;
   } catch (error) {
@@ -79,4 +80,4 @@ const getUserById = async (id) => {
     throw error;
   }
 };
-module.exports = { createUser, getUser, getUserById };
+module.exports = { createUser, getUser, getUserById, getUserByUsername };

@@ -37,7 +37,10 @@ describe('API', () => {
       let tooShortSuccess, tooShortResponse;
       beforeAll(async() => {
         const successResponse = await axios.post(`${API_URL}/api/users/register`, newUser);
-        registeredUser = successResponse.data.user;
+        console.log("api spec createUser: ", successResponse);
+         registeredUser = successResponse.data.user;
+        //registeredUser = successResponse.config.data;
+        console.log("api spec typeof createUser: ", typeof registeredUser);
         try {
           tooShortSuccess = await axios.post(`${API_URL}/api/users/register`, newUserShortPassword);
         } catch(err) {
@@ -45,6 +48,7 @@ describe('API', () => {
         }
       })
       it('Creates a new user.', () => {
+       
         expect(typeof registeredUser).toEqual('object');
         expect(registeredUser.username).toEqual(newUser.username);
       });
