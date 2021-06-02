@@ -48,7 +48,7 @@ const updateRoutine = async(fields = {}) => {
       }
     try{
         let routineToUpdate = await getRoutineById(idReference)
-        // console.log("Routine to update: ", routineToUpdate.id);
+        console.log("Routine to update: ", routineToUpdate.id);
 
         const {rows: [routine]} = await client.query(`
         UPDATE routines 
@@ -210,7 +210,7 @@ const getPublicRoutinesByUser = async(user) => {
 
 const getPublicRoutinesByActivity = async(activity) => {
     // console.log("getPublicRoutinesByActivity: ", activity);
-    const [{id} ]= activity
+    const  {id} = activity
     // console.log("getPublicRoutinesByActivity id: ", id );
     try{
         const {rows} = await client.query(`

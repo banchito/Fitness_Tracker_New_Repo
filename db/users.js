@@ -42,7 +42,12 @@ const getUser = async ({ username, password }) => {
 
     const passwordMatch = compare(password, user.password);
     // console.log("password match :", passwordMatch);
-    if (passwordMatch) return {id: user.id, username: user.username};
+    if (passwordMatch) {
+      delete user.password;
+      return user;
+    } else {
+      return false;
+    }
 
   } catch (error) {
     console.error(error);

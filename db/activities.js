@@ -29,14 +29,23 @@ const getAllActivities = async() => {
     }
 }
 
-const updateActivity = async({ id, name, description }) => {
+const updateActivity = async(fields = {  }) => {
+    //id, name, description
+    console.log(fields);
+    const idReference = fields.id
+    delete fields.id
+    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(", ")
+
     try{
+        const activitiToUpdate = await getActivityById(idReference)
+        console.log("activitiToUpdate: ", activitiToUpdate);
         const {rows: [activity]} = await client.query(`
             UPDATE activities
-            SET name = ($2), description = ($3)
-            WHERE id=$1
-            RETURNING *; 
-        `,[id, name, description]);
+            SET ${setString}
+            WHERE id=${activitiToUpdate.id}
+            RETURNING name, description; 
+        `, Object.values(fields));
+
         return activity
     }catch(error){
         console.error(error)
@@ -46,10 +55,10 @@ const updateActivity = async({ id, name, description }) => {
 
 const getActivityById = async(id)=> {
     try{
-        const {rows} = await client.query(`
+        const {rows: [activities]} = await client.query(`
         SELECT * FROM activities WHERE id=$1;
         `, [id]);
-        return rows;
+        return activities;
     }catch(error){
         console.error(error)
         throw error
