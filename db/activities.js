@@ -30,15 +30,14 @@ const getAllActivities = async() => {
 }
 
 const updateActivity = async(fields = {  }) => {
-    //id, name, description
-    console.log(fields);
+    
     const idReference = fields.id
     delete fields.id
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(", ")
 
     try{
         const activitiToUpdate = await getActivityById(idReference)
-        console.log("activitiToUpdate: ", activitiToUpdate);
+        // console.log("activitiToUpdate: ", activitiToUpdate);
         const {rows: [activity]} = await client.query(`
             UPDATE activities
             SET ${setString}
