@@ -5,6 +5,7 @@ const express           = require('express');
 const apiRouter         = express.Router();
 const usersRouter       = require('./users')
 const activitiesRouter  = require('./activities')
+const routinesRouter    = require('./routines')
 require('dotenv').config();
 
 apiRouter.get("/health", (req,res,next) => {
@@ -13,6 +14,8 @@ apiRouter.get("/health", (req,res,next) => {
 })
 
 apiRouter.use('/users', usersRouter);
-apiRouter.use('/activities', activitiesRouter)
+apiRouter.use('/activities', activitiesRouter);
+apiRouter.use('/routines', routinesRouter);
+
 
 module.exports = apiRouter

@@ -30,7 +30,7 @@ usersRouter.post("/register", async (req, res, next) => {
     };
 
     const user = await createUser({ username, password });
-    console.log("new user: ", user);
+    // console.log("new user: ", user);
     const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET, {expiresIn: "1w"});
 
     res.send(
@@ -47,7 +47,7 @@ usersRouter.post("/register", async (req, res, next) => {
 
 usersRouter.post('/login', async (req, res, next) => {
     const {username, password} = req.body;
-    console.log("/login: ", req.body);
+    // console.log("/login: ", req.body);
 
     if(!username || !password){
       res.status(400).send({
@@ -69,7 +69,7 @@ usersRouter.post('/login', async (req, res, next) => {
         }
         
         if(user === false)  { 
-          console.log("user is false");
+          // console.log("user is false");
           res.status(400).send({ 
                 name: 'IncorrectCredentialsError', 
                 message: 'Username or password is incorrect'
@@ -77,7 +77,7 @@ usersRouter.post('/login', async (req, res, next) => {
             }
 
     }catch(error){
-        console.log("api /login:", error);
+        // console.log("api /login:", error);
         next(error);
     }
 })

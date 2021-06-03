@@ -68,11 +68,18 @@ const updateRoutine = async(fields = {}) => {
 const destroyRoutine = async(id) => {
     // console.log("destroy: ", id);
     try{
-        await client.query(`
+        const {rows: [routine]} = await client.query(`
         DELETE FROM routines
-        WHERE id = $1;
+        WHERE id = $1
+        RETURNING *;
         `, [id]);
 
+        await client.query(`
+            DELETE FROM routine_activities
+            WHERE "routineId" = $1;
+        `[id])
+
+        return routine;
     }catch(error){
         console.error(error)
         throw error
@@ -210,7 +217,7 @@ const getPublicRoutinesByUser = async(user) => {
 
 const getPublicRoutinesByActivity = async(activity) => {
     // console.log("getPublicRoutinesByActivity: ", activity);
-    const  {id} = activity
+    const  { id } = activity
     // console.log("getPublicRoutinesByActivity id: ", id );
     try{
         const {rows} = await client.query(`
