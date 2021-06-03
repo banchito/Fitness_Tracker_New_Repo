@@ -83,8 +83,10 @@ routinesRouter.delete("/:routineId", async(req, res, next) => {
 })
 
 routinesRouter.post("/:routineId/activities", async(req, res, next) => {
+    //console.log("params: ",req.params);
+    console.log("body: ", req.body);
     const {routineId} = req.params;
-    const {activityId, duration, count} = req.body;
+    const { activityId, duration, count} = req.body;
 
     try{
         const activity = await addActivityToRoutine({routineId, activityId, duration, count});
