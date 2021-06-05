@@ -8,7 +8,6 @@ const createActivity = async({name, description}) => {
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
         `, [name, description]);
-        // console.log("create activity at activities.js:", rows);
         return activity
     }catch(error){
         console.log(error)
@@ -21,7 +20,6 @@ const getAllActivities = async() => {
         const {rows} = await client.query(`
             SELECT * FROM activities;
         `);
-        // console.log("getAllActivities at activities.js: ", rows)
         return rows
     }catch(error){
         console.error(error)
@@ -37,7 +35,6 @@ const updateActivity = async(fields = {  }) => {
 
     try{
         const activitiToUpdate = await getActivityById(idReference)
-        // console.log("activitiToUpdate: ", activitiToUpdate);
         const {rows: [activity]} = await client.query(`
             UPDATE activities
             SET ${setString}

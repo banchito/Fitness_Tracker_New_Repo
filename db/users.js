@@ -5,8 +5,6 @@ const { hash, compare } = require("./hash");
 
 const createUser = async ({ username, password }) => {
   const hashedPassword = hash(password);
-  console.log("username and passw: ", username, password);
-  // console.log("hashedPassword: ", hashedPassword);
   try {
     const {
       rows: [user],
@@ -18,11 +16,9 @@ const createUser = async ({ username, password }) => {
             `,
       [username, hashedPassword]
     );
-     console.log("createUsers at users.js:", user);
 
     return user;
   } catch (error) {
-    console.log("Failed to create user.", username);
     console.error(error);
     return false;
   }
@@ -36,12 +32,10 @@ const getUser = async ({ username, password }) => {
       ` SELECT id, username, password FROM users WHERE username=$1 LIMIT 1;`,
       [username]
     );
-    // console.log("getUser at user.js:", user.password);
 
     if (!user) return false;
 
     const passwordMatch = compare(password, user.password);
-    // console.log("password match :", passwordMatch);
     if (passwordMatch) {
       delete user.password;
       return user;
@@ -61,7 +55,6 @@ const getUserByUsername = async(username) => {
             SELECT username, id FROM users WHERE username=$1`,[username]);
             return user
     }catch(error){
-      console.log("Failed to create user.", username);
       console.error(error);
       return false;
     
@@ -78,7 +71,6 @@ const getUserById = async (id) => {
         `,
       [id]
     );
-    // console.log("getUserById: ", user);
     return user;
   } catch (error) {
     console.error(error);

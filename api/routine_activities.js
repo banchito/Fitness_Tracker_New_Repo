@@ -1,8 +1,8 @@
 const express = require("express");
 const routineActivitiesRouter = express.Router();
-const jwt = require("jsonwebtoken");
-const {
-  updateRoutineActivity, getRoutineActivityById, getRoutineById, destroyRoutineActivity } = require("../db");
+
+const { verifyToken } = require("../utils");
+const {updateRoutineActivity, getRoutineActivityById, destroyRoutineActivity } = require("../db");
 
 routineActivitiesRouter.use((req, res, next) => {
   console.log("A request is being made to /routine_activities");
@@ -12,50 +12,37 @@ routineActivitiesRouter.use((req, res, next) => {
 routineActivitiesRouter.patch("/:routineActivityId", async (req, res, next) => {
   const { routineActivityId } = req.params;
   const { count, duration } = req.body;
+  const headersAuth = req.headers.authorization;
 
   try {
-    if (req.headers.authorization) {
-      const [, token]               = req.headers.authorization.split("Bearer ");
-      const validatedToken          = jwt.verify(token, process.env.JWT_SECRET);
+    if (!headersAuth) return res.status(403).send({ message: `Please login` });
+    
+      const verifiedToken = verifyToken(headersAuth);
       const routineActivityToUpdate = await getRoutineActivityById(routineActivityId);
-      const routine = await getRoutineById(routineActivityToUpdate.routineId);
 
-      if (validatedToken.id === routine.creatorId) {
-        const routineActivityUpdated = await updateRoutineActivity({
-          id: routineActivityId,
-          count,
-          duration,
-        });
-        res.send(routineActivityUpdated);
-      } else {
-        res.status(403).send({ message: `Routine creator not logged in` });
-      }
-    }
+      (verifiedToken.id === routineActivityToUpdate.creatorId) 
+      ? res.send(await updateRoutineActivity({ id: routineActivityId, count, duration }))
+      : res.status(403).send({ message: `Please login` });
+    
   } catch (error) {
     next(error);
   }
 });
 
-routineActivitiesRouter.delete("/:routineActivityId", async(req, res, next)=>{
-    const {routineActivityId} = req.params
-    try{
-        if(req.headers.authorization){
-            const [, token]                 = req.headers.authorization.split("Bearer ");
-            const validatedToken            = jwt.verify(token, process.env.JWT_SECRET)
-            const routineActivityToDelete   = await getRoutineActivityById(routineActivityId)
-            const routine                   = await getRoutineById(routineActivityToDelete.routineId);
+routineActivitiesRouter.delete("/:routineActivityId", async (req, res, next) => {
+    const { routineActivityId } = req.params;
+    const headersAuth = req.headers.authorization;
+    try {
+      if (headersAuth) {
+        const verifiedToken = verifyToken(headersAuth);
+        const routineActivityToDelete = await getRoutineActivityById(routineActivityId);
 
-           if(validatedToken.id === routine.creatorId){
-                const result = await destroyRoutineActivity(routineActivityToDelete.id);
-                res.send(result)
-           }else{
-            res.status(403).send({ message: `Routine creator not logged in` });
-           }
-            
-        }
-    }catch(error){
-
-    }
-})
+        (verifiedToken.id === routineActivityToDelete.creatorId)
+        ? res.send(await destroyRoutineActivity(routineActivityToDelete.id))
+        : res.status(403).send({ message: `Routine creator not logged in` });
+      }
+    } catch (error) {}
+  }
+);
 
 module.exports = routineActivitiesRouter;

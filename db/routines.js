@@ -9,7 +9,6 @@ const createRoutine = async({creatorId, isPublic, name, goal}) => {
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
         `, [creatorId, isPublic, name, goal]);
-        //   console.log("createRoutine at routine.js:", activity);
 
         return activity;
     }catch(error){
@@ -19,12 +18,10 @@ const createRoutine = async({creatorId, isPublic, name, goal}) => {
 }
 
 const getRoutineById = async(id) => {
-    //  console.log("getRByid: ", id);
     try{
         const {rows: [routine]} = await client.query(`
         SELECT * FROM routines WHERE id=$1
         `, [id]);
-        // console.log("get R by ID: ", routine);
         return routine;
     }catch(error){
         console.error(error)
@@ -33,13 +30,8 @@ const getRoutineById = async(id) => {
 }
 
 const updateRoutine = async(fields = {}) => {
-    // console.log("routine update routine: ",routine);
-    // const {id, fields = {}} = routine
-    
-    // console.log("fields: ", fields);
     const idReference = fields.id
     delete fields.id
-    // console.log("fields: ", fields);
 
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(", ")
 
@@ -57,7 +49,6 @@ const updateRoutine = async(fields = {}) => {
         RETURNING *;
         ` , Object.values(fields));
 
-        // console.log("updateRoutine: ",routine);
         return routine;
     }catch(error){
         console.error(error)
@@ -66,7 +57,6 @@ const updateRoutine = async(fields = {}) => {
 }
 
 const destroyRoutine = async(id) => {
-    // console.log("destroy: ", id);
     try{
         const {rows: [routine]} = await client.query(`
         DELETE FROM routines
@@ -92,7 +82,6 @@ const getRoutinesWithoutActivities = async() => {
         const {rows} = await client.query(`
             SELECT * FROM routines;
         `)
-        // console.log("getRoutinesWithoutActivities: ", rows);
         return rows
     }catch(error){
         console.error(error)
@@ -175,7 +164,6 @@ const getAllRoutinesByUser = async(user) => {
             delete row.count
 
         });
-        // console.log("getAllRoutinesByUser: ",rows)
 
         return rows;
     }catch(error){
@@ -206,7 +194,6 @@ const getPublicRoutinesByUser = async(user) => {
             delete row.count
 
         });
-        // console.log("getAllRoutinesByUser: ",rows)
 
         return rows;
     }catch(error){
@@ -216,9 +203,9 @@ const getPublicRoutinesByUser = async(user) => {
 }
 
 const getPublicRoutinesByActivity = async(activity) => {
-    // console.log("getPublicRoutinesByActivity: ", activity);
+
     const  { id } = activity
-    // console.log("getPublicRoutinesByActivity id: ", id );
+
     try{
         const {rows} = await client.query(`
         SELECT r."creatorId", r.goal, r.id AS "routineID", r."isPublic", r.name, a.description, a.id as "activityId", u.username AS "creatorName",u.id, ra.duration, ra.count
@@ -228,7 +215,6 @@ const getPublicRoutinesByActivity = async(activity) => {
         JOIN users u ON r."creatorId" = u.id
         WHERE a.id = $1;
         `,[id])
-        // console.log("getPublicRoutinesByActivity rows: ",rows);
         rows.forEach((row)=>{
             row.activities = [{id:row.activityId, description: row.description, count: row.count, duration:row.duration}]
         })
