@@ -1,6 +1,6 @@
 const express           = require('express');
 const activitiesRouter  = express.Router();
-const {verifyToken}          = require("../utils");
+const {verifyToken}     = require("../utils");
 const {getAllActivities, createActivity, updateActivity, getPublicRoutinesByActivity} = require('../db');
 
 activitiesRouter.use((req, res, next) => {
@@ -46,6 +46,7 @@ activitiesRouter.patch("/:activityId", async (req, res, next) => {
             verifiedToken
             ? res.send(await updateActivity({id: activityId, name, description}))
             :res.status(403).send({ message: `Please login` });
+            
     }catch(error){
         next(error)
     }

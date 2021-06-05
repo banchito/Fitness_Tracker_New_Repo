@@ -59,6 +59,8 @@ usersRouter.post('/login', async (req, res, next) => {
     try{
         const user = await getUser({username, password})
 
+        if(!user) {throw new Error(`username/password invalid`)}
+
         if(user){
             const token = jwt.sign({id:user.id, username}, process.env.JWT_SECRET, {expiresIn: "1w"})
             res.send({ user:{id: user.id, username: user.username}, message: `You are logged in ${user.username}!`, token: token})
@@ -81,6 +83,7 @@ usersRouter.get("/me", async(req, res, next) =>{
 
   try{
     if (!headersAuth) return res.status(403).send({ message: `Please login` });
+
       const verifiedToken = verifyToken(headersAuth);
       const user = await getUserById(verifiedToken.id);
 
@@ -91,7 +94,7 @@ usersRouter.get("/me", async(req, res, next) =>{
     }
 })
 
-usersRouter.get("/:username/routines", async(req,res,next)=>{
+usersRouter.get("/:username/routines", async(req, res ,next)=>{
   const {username} = req.params;
   try{
     

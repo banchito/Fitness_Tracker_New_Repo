@@ -1,5 +1,7 @@
 const express           = require("express");
 const routinesRouter    = express.Router();
+//const {Router}        = require("express");
+//const routinesRouter  = Router();
 const {verifyToken}     = require('../utils')
 const {getAllPublicRoutines,createRoutine, updateRoutine, getRoutineById, destroyRoutine, addActivityToRoutine}                = require("../db");
 
@@ -21,6 +23,7 @@ routinesRouter.post("/", async(req, res, next) => {
     const headersAuth  = req.headers.authorization;
 
     try{
+
     if(!headersAuth) return res.status(403).send({ message: `Please login` });
 
     const verifiedToken = verifyToken(headersAuth);
@@ -43,10 +46,8 @@ routinesRouter.patch("/:routineId", async(req, res, next) => {
         if (!headersAuth) return res.status(403).send({ message: `Please login` });
 
         const verifiedToken     = verifyToken(headersAuth);
-        // console.log("verifiedToken: ", verifiedToken);
         const routineToUpdate   = await getRoutineById(routineId)
-        //  console.log("routineToUpdate here: ", routineToUpdate);
-        // console.log("routineId: ", routineId);
+
         verifiedToken.id === routineToUpdate.creatorId
         ? res.send(await updateRoutine({id: routineId, name, isPublic, goal}))
         : res.status(403).send({ message: `Routine creator not logged in` });
@@ -59,7 +60,7 @@ routinesRouter.patch("/:routineId", async(req, res, next) => {
 routinesRouter.delete("/:routineId", async(req, res, next) => {
 
     const { routineId }  = req.params;
-    const headersAuth = req.headers.authorization;
+    const headersAuth    = req.headers.authorization;
 
     try{
         if (!headersAuth) return res.status(403).send({ message: `Please login` });
@@ -78,8 +79,8 @@ routinesRouter.delete("/:routineId", async(req, res, next) => {
 })
 
 routinesRouter.post("/:routineId/activities", async(req, res, next) => {
-    const {routineId} = req.params;
-    const { activityId, duration, count} = req.body;
+    const {routineId}                       = req.params;
+    const { activityId, duration, count}    = req.body;
 
     try{
         const activity = await addActivityToRoutine({routineId, activityId, duration, count});

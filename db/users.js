@@ -25,6 +25,8 @@ const createUser = async ({ username, password }) => {
 };
 
 const getUser = async ({ username, password }) => {
+  if(!username || !password) return
+  
   try {
     const {
       rows: [user],
