@@ -1,4 +1,4 @@
-# fitnesstrackr Fork BY Esteban Ordonez
+# Fitnesstrackr Fork BY Esteban Ordonez
 an API for our new fitness empire, FitnessTrac.kr, using node, express, and postgresql
 Please find the Heroku server based application here https://glacial-bayou-64478.herokuapp.com/api/routines
 ## Getting Started
