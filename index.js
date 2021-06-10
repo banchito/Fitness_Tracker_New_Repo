@@ -7,7 +7,7 @@ const client        = require('./db/client');
 const apiRouter     = require('./api')
 
 
-const {PORT = 3000} = process.env
+const { PORT = 3000 } = process.env
 const server = express();
 
 server.use(express.json());
