@@ -2,7 +2,14 @@ const client = require("./client");
 const { hash, compare } = require("./hash");
 
 
-
+const getAllUsers = async () => {
+  try{
+    const {rows} = await client.query(`SELECT * FROM USERS;`);
+    return rows;
+  }catch(error){
+    throw error
+  }
+}
 const createUser = async ({ username, password }) => {
   const hashedPassword = hash(password);
   try {
@@ -54,7 +61,7 @@ const getUser = async ({ username, password }) => {
 const getUserByUsername = async(username) => {
     try{
         const {rows: [user]} = await client.query(`
-            SELECT username, id FROM users WHERE username=$1`,[username]);
+            SELECT id, username FROM users WHERE username=$1`,[username]);
             return user
     }catch(error){
       console.error(error);
@@ -79,4 +86,4 @@ const getUserById = async (id) => {
     throw error;
   }
 };
-module.exports = { createUser, getUser, getUserById, getUserByUsername };
+module.exports = { createUser, getUser, getUserById, getUserByUsername, getAllUsers };

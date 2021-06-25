@@ -22,6 +22,7 @@ const getRoutineById = async(id) => {
         const {rows: [routine]} = await client.query(`
         SELECT * FROM routines WHERE id=$1
         `, [id]);
+        
         return routine;
     }catch(error){
         console.error(error)
@@ -173,7 +174,7 @@ const getAllRoutinesByUser = async(user) => {
 }
 
 const getPublicRoutinesByUser = async(user) => {
-    
+    console.log("getPublicRoutinesByUser: ",user);
     const {id, username} = user
     
     try{
@@ -194,7 +195,7 @@ const getPublicRoutinesByUser = async(user) => {
             delete row.count
 
         });
-
+        console.log("rows testing",rows);
         return rows;
     }catch(error){
         console.error(error)

@@ -17,7 +17,6 @@ const getRoutineActivityById = async(id) => {
 
 const addActivityToRoutine = async({routineId, activityId, duration, count}) => {
 
-
     try{
         const { rows: [routine_activity] } = await client.query(`
             INSERT INTO routine_activities

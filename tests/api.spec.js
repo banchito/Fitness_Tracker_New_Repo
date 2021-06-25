@@ -95,7 +95,8 @@ describe('API', () => {
       it('sends back users data if valid token is supplied in header', async () => {
         const {data} = await axios.get(`${API_URL}/api/users/me`, {
           headers: {'Authorization': `Bearer ${token}`}
-        });        
+        });    
+        console.log("data /users/me: ",data);    
         expect(data.username).toBeTruthy();
         expect(data.username).toBe(registeredUser.username);
       });

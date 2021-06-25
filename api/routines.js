@@ -3,7 +3,7 @@ const routinesRouter    = express.Router();
 //const {Router}        = require("express");
 //const routinesRouter  = Router();
 const {verifyToken}     = require('../utils')
-const {getAllPublicRoutines,createRoutine, updateRoutine, getRoutineById, destroyRoutine, addActivityToRoutine}                = require("../db");
+const {getAllPublicRoutines,createRoutine, updateRoutine, getRoutineById, destroyRoutine, addActivityToRoutine, getAllRoutinesByUser}                = require("../db");
 
 routinesRouter.use((req, res, next) => {
     console.log("A request is being made to /activities");
@@ -18,6 +18,7 @@ routinesRouter.get("/", async(req ,res ,next) => {
         next(error)
     }
 });
+
 routinesRouter.post("/", async(req, res, next) => {
     const {name, goal, isPublic } = req.body;
     const headersAuth  = req.headers.authorization;
@@ -79,7 +80,7 @@ routinesRouter.delete("/:routineId", async(req, res, next) => {
 })
 
 routinesRouter.post("/:routineId/activities", async(req, res, next) => {
-    const {routineId}                       = req.params;
+    const { routineId }                     = req.params;
     const { activityId, duration, count}    = req.body;
 
     try{

@@ -2,12 +2,21 @@ const express         = require("express");
 const usersRouter     = express.Router();
 const jwt             = require('jsonwebtoken')
 const {verifyToken}   = require("../utils");
-const { createUser, getUserByUsername, getUser, getUserById, getPublicRoutinesByUser } = require("../db");
+const {getAllUsers, createUser, getUserByUsername, getUser, getUserById, getPublicRoutinesByUser } = require("../db");
 
 usersRouter.use((req, res, next) => {
   console.log("A request is being made to /users");
   next();
 });
+
+usersRouter.get("/all", async (req,res,next)=>{
+  try{
+    const users = await getAllUsers();
+    res.send(users)
+  }catch(error){
+    throw error
+  }
+})
 
 usersRouter.post("/register", async (req, res, next) => {
   console.log("/register body :", req.body);
@@ -16,17 +25,16 @@ usersRouter.post("/register", async (req, res, next) => {
   try {
     const _user = await getUserByUsername(username);
     if (_user) {
-      next({
+      res.status(400).send({
         name: "UserExistsError",
         message: "A user by that username already exists.",
       });
     };
 
     if(password.length < 8 ){
-        next({
-            name: "PasswordLengthError",
-            message: "Password must be at least 8 characters.",
-          });
+      return res
+        .status(406)
+        .send({ message: `Password must be at least 8 characters long` });
     };
 
     const user = await createUser({ username, password });
@@ -85,8 +93,12 @@ usersRouter.get("/me", async(req, res, next) =>{
 
       const verifiedToken = verifyToken(headersAuth);
       const user = await getUserById(verifiedToken.id);
+      console.log("routines me:", user);
+      if(!user) return res.send({ message: `Couldn't find: ${username}` })
 
-      user ? res.send(user) : res.status(403).send({ message: `Please login` });
+      const routines = await getPublicRoutinesByUser({id: user.id, username: user.username })
+      console.log("routines me: ",routines);
+      user ? res.send(user, routines) : res.status(403).send({ message: `Please login` });
    
     }catch(error){
       next(error)
