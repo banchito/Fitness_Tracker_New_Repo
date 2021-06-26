@@ -1,15 +1,6 @@
 const client = require("./client");
 const { hash, compare } = require("./hash");
 
-
-const getAllUsers = async () => {
-  try{
-    const {rows} = await client.query(`SELECT * FROM USERS;`);
-    return rows;
-  }catch(error){
-    throw error
-  }
-}
 const createUser = async ({ username, password }) => {
   const hashedPassword = hash(password);
   try {
@@ -86,4 +77,4 @@ const getUserById = async (id) => {
     throw error;
   }
 };
-module.exports = { createUser, getUser, getUserById, getUserByUsername, getAllUsers };
+module.exports = { createUser, getUser, getUserById, getUserByUsername };
