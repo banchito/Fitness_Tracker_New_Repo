@@ -95,8 +95,11 @@ usersRouter.get("/me", async(req, res, next) =>{
 usersRouter.get("/:username/routines", async(req, res ,next)=>{
   const {username} = req.params;
   try{
-    
-    const user = await getUserByUsername(username)
+    if (!headersAuth) return res.status(403).send({ message: `Please login` });
+
+    const verifiedToken = verifyToken(headersAuth);
+    const user = await getUserById(verifiedToken.id);
+
     if(!user) return res.send({ message: `Couldn't find: ${username}` })
 
     const routines = await getPublicRoutinesByUser({id: user.id, username: user.username })
