@@ -22,7 +22,7 @@ usersRouter.post("/register", async (req, res, next) => {
       });
     };
 
-    if(password.length < 8 ){
+    if(password.length < 8 || !password ){
       return res
         .status(406)
         .send({ message: `Password must be at least 8 characters long` });
