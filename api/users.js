@@ -85,7 +85,7 @@ usersRouter.get("/me", async(req, res, next) =>{
       const verifiedToken = verifyToken(headersAuth);
       const user = await getUserById(verifiedToken.id);
 
-      user ? res.send(user) : res.status(403).send({ message: `Please login` });
+      user ? res.send(user) : res.status(403).send({ message: `Please register or login` });
    
     }catch(error){
       next(error)
@@ -95,10 +95,8 @@ usersRouter.get("/me", async(req, res, next) =>{
 usersRouter.get("/:username/routines", async(req, res ,next)=>{
   const {username} = req.params;
   try{
-    if (!headersAuth) return res.status(403).send({ message: `Please login` });
 
-    const verifiedToken = verifyToken(headersAuth);
-    const user = await getUserById(verifiedToken.id);
+     const user = await getUserByUserName(username);
 
     if(!user) return res.send({ message: `Couldn't find: ${username}` })
 
