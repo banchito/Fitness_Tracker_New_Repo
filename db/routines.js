@@ -174,7 +174,7 @@ const getAllRoutinesByUser = async(user) => {
 }
 
 const getPublicRoutinesByUser = async(user) => {
-    console.log("getPublicRoutinesByUser: ",user);
+ 
     const {id, username} = user
     
     try{
