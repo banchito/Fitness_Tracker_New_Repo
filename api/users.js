@@ -57,7 +57,7 @@ usersRouter.post('/login', async (req, res, next) => {
     try{
         const user = await getUser({username, password})
 
-        if(!user) {throw new Error(`username/password invalid`)}
+        if(!user) {res.status(400).send(`username/password invalid`)}
 
         if(user){
             const token = jwt.sign({id:user.id, username}, process.env.JWT_SECRET, {expiresIn: "1w"})
