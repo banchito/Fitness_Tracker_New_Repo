@@ -46,7 +46,7 @@ usersRouter.post("/register", async (req, res, next) => {
 usersRouter.post('/login', async (req, res, next) => {
     const {username, password} = req.body;
 
-    if(!username || !password){
+    if(!username || !password || password.length < 8){
       res.status(400).send({
             name: "MissingCredentialsError",
             message: "Please supply both a username and password"
