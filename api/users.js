@@ -10,7 +10,7 @@ usersRouter.use((req, res, next) => {
 });
 
 usersRouter.post("/register", async (req, res, next) => {
-  console.log("/register body :", req.body);
+
   const { username, password } = req.body;
     
   try {
@@ -96,7 +96,7 @@ usersRouter.get("/:username/routines", async(req, res ,next)=>{
   const {username} = req.params;
   try{
 
-     const user = await getUserByUserName(username);
+    const user = await getUserByUserName(username);
 
     if(!user) return res.send({ message: `Couldn't find: ${username}` })
 

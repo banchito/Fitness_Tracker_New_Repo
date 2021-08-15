@@ -12,6 +12,7 @@ async function dropTables() {
       DROP TABLE IF EXISTS activities;
       DROP TABLE IF EXISTS users;
     `);
+    console.log("Finishing Dropping All Tables...");
   } catch (error) {
     console.error("Error while dropping tables!");
     throw error;
@@ -78,9 +79,7 @@ async function createInitialUsers() {
       { username: "glamgal", password: "glamgal123" },
     ];
     const users = await Promise.all(usersToCreate.map(createUser));
-
-   
-   
+    
     console.log("Finished creating users!");
   } catch (error) {
     console.error("Error creating users!");

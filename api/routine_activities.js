@@ -41,7 +41,7 @@ routineActivitiesRouter.delete("/:routineActivityId", async (req, res, next) => 
         ? res.send(await destroyRoutineActivity(routineActivityToDelete.id))
         : res.status(403).send({ message: `Routine creator not logged in` });
       }
-    } catch (error) {}
+    } catch (error) {next(error);}
   }
 );
 

@@ -75,7 +75,7 @@ routinesRouter.delete("/:routineId", async(req, res, next) => {
             
         
     }catch(error){
-
+        next(error)
     }
 })
 
